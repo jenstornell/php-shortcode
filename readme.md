@@ -18,7 +18,7 @@ include __DIR__ . '/shortcode.php';
 
 // Custom method - The shortcode will be replaced by the output of this code
 shortcode::add('button', function($args) {
-  return sprintf('<a href="%s">%s</a>', $args->url, $args->title);
+  return '<a href="' . $args->url . '">' . $args->title . '</a>';
 });
 
 // HTML content including the shortcode
@@ -101,7 +101,7 @@ shortcode::add('button', function() {
 
 ```php
 shortcode::add('button', function($args) {
-  return sprintf('<a href="%s">%s</a>', $args->url, $args->title);
+  return '<a href="' . $args->url . '">' . $args->title . '</a>';
 });
 ```
 
@@ -168,7 +168,7 @@ To solve this problem you can convert the quotes to HTML characters.
 ```php
 shortcode::add('button', function($args) {
   $title = htmlspecialchars($args->title, ENT_QUOTES);
-  return sprintf('<a href="%s">%s</a>', $args->url, $title);
+  return '<a href="' . $args->url . '">' . $title . '</a>';
 });
 ```
 

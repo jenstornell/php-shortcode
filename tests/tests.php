@@ -20,3 +20,13 @@ shortcode::add('button', function($args, $quotes) {
 });
 
 echo shortcode::filter($html);
+
+echo "\n\n<h2>RESET</h2>\n\n";
+
+shortcode::unsetAll();
+
+shortcode::add('button', function() {
+  return 'hello';
+});
+
+echo shortcode::filter($html);

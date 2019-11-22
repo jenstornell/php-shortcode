@@ -3,7 +3,7 @@ include __DIR__ . '/shortcode.php';
 
 // Custom method - The shortcode will be replaced by the output of this code
 shortcode::add('button', function($args) {
-  return sprintf('<a href="%s">%s</a>', $args->url, $args->title);
+  return '<a href="' . $args->url . '">' . $args->title . '</a>';
 });
 
 // HTML content including the shortcode
