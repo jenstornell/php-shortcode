@@ -4,10 +4,10 @@
 
 ## Features
 
-- Pure PHP shortcode library without dependencies
 - Just a single file
+- No dependencies
 - Very easy to use
-- Shortcodes support both single and double quotes
+- Shortcodes supports single, double and literal quotes
 
 ## Summary
 
@@ -31,7 +31,7 @@ Include the `shortcode.php` file. Just make sure the path is correct.
 include __DIR__ . '/shortcode.php';
 ```
 
-## Shortcode
+## HTML
 
 A shortcode starts with `[` and ends with `]`. The whole shortcode will then be replaced with the output from your custom method.
 
@@ -145,7 +145,7 @@ Remove all custom methods from memory.
 shortcode::unsetAll();
 ```
 
-### Alternative usage - Instantiated
+### Alternative usage - Instantiated method
 
 With all methods you can use an instantiated class instead if you prefer that approach.
 
@@ -156,15 +156,10 @@ echo $shortcode->filter('[button]');
 
 ### A note about quotes
 
-Let's say you are using double quotes in your shortcode. Then if you are also using double quotes in the custom method output, it will break your HTML.
-
-To solve this problem you can convert the quotes to HTML characters.
+To prevent breaking HTML, it can sometimes be good to convert quotes to html characters.
 
 ```php
-shortcode::add('button', function($args) {
-  $title = htmlspecialchars($args->title, ENT_QUOTES);
-  return '<a href="' . $args->url . '">' . $title . '</a>';
-});
+$some_argument = htmlspecialchars($args->some_argument, ENT_QUOTES);
 ```
 
 ## Todo
