@@ -102,14 +102,20 @@ shortcode::add('button', function($args) {
 
 ### With types
 
+Your shortcode quotes may vary from time to time.
+
+- `[quote content='"I am a quote"']`
+- `[quote content="'I am a quote'"]`
+
+If you are not always using the same type of quotes, you may need to use the second optional parameter `$quotes`.
+
 ```php
-shortcode::add('button', function($args, $quotes) {
+shortcode::add('quote', function($args, $quotes) {
   return sprintf('
-    <a href=%s%s%s>%s</a>',
-    $quotes->url,
-    $args->url,
-    $quotes->url,
-    $args->title
+    <div data-content=%s%s%s></div>',
+    $quotes->content,
+    $args->content,
+    $quotes->content,
   );
 });
 ```
