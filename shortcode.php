@@ -34,9 +34,12 @@ class PHPShortcode {
 
       foreach($codes as $j => $code) {
         $args_array = $this->argsToArray($args[$j]);
+        $data = (object)$args_array['data'];
+        $types = (object)$args_array['quotes'];
+
         $collection[$i] = [
           'before' => $code,
-          'after' => $shortcodes[$name]($args_array)
+          'after' => $shortcodes[$name]($data, $types)
         ];
         $i++;
       }
@@ -55,21 +58,42 @@ class PHPShortcode {
   function argsToArray($incode) {
     $incode = trim($incode);
 
-    preg_match_all('~(?|"([^"]*)"|\'([^\']*)\')~', $incode, $matches);
+    $single = '\'([^\']*)\'';
+    $double = '"([^"]*)"';
+    $literals = '`([^`]*)`';
+
+    preg_match_all('~(?|' . $double . '|' . $single . '|' . $literals . ')~', $incode, $matches);
 
     if(count($matches[0]) == 0) {
-      return (object)[];
-    print_r($matches);
+      return [
+        'data' => null,
+        'quotes' => null
+      ];
     }
 
     $mashed_incode = $this->mashedIncode($incode, $matches);
     $keys = $this->getKeys($mashed_incode);
 
-    foreach($matches[1] as $i => $finding) {
-      $args[$keys[$i]] = $finding;
+    foreach($matches[1] as $i => $match) {
+      $args['data'][$keys[$i]] = $match;
+      $args['quotes'][$keys[$i]] = $this->type($matches[0][$i]);
     }
 
-    return (object)$args;
+    return $args;
+  }
+
+  // Type
+  function type($value) {
+    switch(substr($value, 0, 1)) {
+      case "'":
+        return "'";
+        break;
+      case '"':
+        return '"';
+        break;
+      default:
+        return null;
+    }
   }
 
   // Mashed incode
@@ -126,9 +150,3 @@ class shortcode {
     $shortcode->unsetAll();
   }
 }
-
-/* ## Features
-// Support for numbers, alltså utan quotes
-// Support for ``
-// Send type of quotes to custom methods?
-*/

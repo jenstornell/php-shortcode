@@ -1,5 +1,7 @@
 # PHP Shortcode
 
+*Version 1.0*
+
 ## Features
 
 - Pure PHP shortcode library without dependencies
@@ -46,15 +48,29 @@ A shortcode starts with `[` and ends with `]`. The whole shortcode will then be 
 
 ### Arguments and double quotes
 
+Single quotes can be used inside the double quotes.
+
 ```text
 [button title="It's a button" url="about"]
 ```
 
 ### Arguments and single quotes
 
+Double quotes can be used inside single quotes.
+
 ```text
 [button title='My "button"' url='about']
 ```
+
+### Arguments and template literals
+
+Both single and double quotes can be used inside template literals.
+
+```text
+[button title=`It's my "button"` url='about']
+```
+
+<!--
 
 ### Arguments and no quotes, only for integers
 
@@ -62,16 +78,26 @@ A shortcode starts with `[` and ends with `]`. The whole shortcode will then be 
 [button title="About" id=42]
 ```
 
+-->
+
 ## Custom method
 
 With a custom method, you will replace the shortcode with your custom method output.
 
 - `name` - The name of the shortcode [`button` title="button"]
 - `method` - The output of the method will replace the shortcode.
+- `args` (optional) - Arguments sent from the shortcode.
+- `types` (optional) - The type of quotes that was used for each argument.
 
-### Static
+### Without arguments
 
-The shortest way is to use a static class.
+```php
+shortcode::add('button', function() {
+  return 'Hello!';
+});
+```
+
+### With arguments
 
 ```php
 shortcode::add('button', function($args) {
@@ -79,37 +105,28 @@ shortcode::add('button', function($args) {
 });
 ```
 
-### Instantiated
-
-If you prefer working with an instance of a class, you can use this method instead.
+### With types
 
 ```php
-$shortcode = new PHPShortcode();
-$shortcode->add('button', function($args) {
-  return sprintf('<a href="%s">%s</a>', $args->url, $args->title);
+shortcode::add('button', function($args, $quotes) {
+  return sprintf('
+    <a href=%s%s%s>%s</a>',
+    $quotes->url,
+    $args->url,
+    $quotes->url,
+    $args->title
+  );
 });
 ```
 
 ## Filter html
 
-### Static
-
-The shortest way is to use a static class.
+All shortcodes will be replaced with the output from your custom method.
 
 ```php
 $html = '<p>[button]</p>';
 echo shortcode::filter($html);
 ```
-
-### Instantiated
-
-```php
-$html = '<p>[button]</p>';
-$shortcode = new PHPShortcode();
-$shortcode->filter($html);
-```
-
-*If you already have an instance (when created the custom method), you don't need to create a new one.*
 
 ## Unset shortcode(s)
 
@@ -125,13 +142,6 @@ Remove a single custom method from memory by shortcode name.
 shortcode::unset('button');
 ```
 
-or
-
-```php
-$shortcode = new PHPShortcode();
-$shortcode->unset('button');
-```
-
 ### `unsetAll`
 
 Remove all custom methods from memory.
@@ -140,11 +150,13 @@ Remove all custom methods from memory.
 shortcode::unsetAll();
 ```
 
-or
+### Alternative usage - Instantiated
+
+With all methods you can use an instantiated class instead if you prefer that approach.
 
 ```php
 $shortcode = new PHPShortcode();
-$shortcode->unsetAll();
+echo $shortcode->filter('[button]');
 ```
 
 ### A note about quotes
@@ -159,6 +171,10 @@ shortcode::add('button', function($args) {
   return sprintf('<a href="%s">%s</a>', $args->url, $title);
 });
 ```
+
+## Todo
+
+- Support for usage without quotes, mainly for integers.
 
 ## Limitations
 
