@@ -91,6 +91,8 @@ class PHPShortcode {
       case '"':
         return '"';
         break;
+      case '`':
+        return '`';
       default:
         return null;
     }
