@@ -134,7 +134,7 @@ class PHPShortcode {
 class shortcode {
   public static function add($name, $method) {
     $shortcode = new PHPShortcode();
-    $shortcode->add('button', $method);
+    $shortcode->add($name, $method);
   }
 
   public static function filter($html) {

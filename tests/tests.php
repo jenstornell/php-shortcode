@@ -30,3 +30,17 @@ shortcode::add('button', function() {
 });
 
 echo shortcode::filter($html);
+
+echo "\n\n<h2>THUNDERER\n\n";
+
+$shortcode = new PHPShortcode();
+$shortcode->add('hello', function($args) {
+  return sprintf('Hello, %s!', $args->name);
+});
+
+$text = '
+    <div class="user">[hello name="Thomas"]</div>
+    <p>Your shortcodes are very good, keep it up!</p>
+    <div class="user">[hello name="Peter"]</div>
+';
+echo $shortcode->filter($text);
