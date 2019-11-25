@@ -24,7 +24,9 @@ class PHPShortcode {
   // Before after collection
   function beforeAfterCollection($html) {
     global $shortcodes;
+
     $i = 0;
+    $collection = [];
 
     foreach ($shortcodes as $name => $value) {
       $matches = $this->getShortcodesFromHtml($name, $html);
